@@ -6,7 +6,7 @@
           mouseIsPressed, windowWidth, windowHeight, noStroke, UP_ARROW, DOWN_ARROW 
           LEFT_ARROW, RIGHT_ARROW, backgroundColor, round textAlign CENTER LEFT floor \
           loadFont textFont createButton mouseIsPressed break myDraw textStyle BOLD
-          keyIsPressed*/
+          keyIsPressed noFill*/
 
 let duration, pomTimes, backgroundColor, timeX, timeY;
 let score;
@@ -15,6 +15,7 @@ let mouseEllipse,
   ball2,
   ball3,
   balls = [];
+let level, exp, health, expCap;
 
 let timerOver = false,
   timerOn = false,
@@ -50,6 +51,7 @@ function setup() {
 
   // startTimer setup
   startTimerButton = createButton("  start  ");
+  startTimerButton.mousePressed(false); 
   startTimerButton.position(width / 2 - 20, 300);
   startTimerButton.style("background-color", color(177, 83, 27));
   startTimerButton.style("border-color", color(176, 100, 81));
@@ -69,6 +71,12 @@ function setup() {
   }
   score = 0;
   noStroke();
+
+  // over-arching game setup
+  level = 0;
+  exp = 0;
+  health = 50;
+  expCap = 100;
 
   pageOne();
 }
@@ -130,7 +138,10 @@ function pauseTimer() {
 }
 
 function mousePressed() {
-  if (startTimerButton.mousePressed()) {
+  console.log("mouse is pressed")
+  
+  if (startTimerButton.mousePressed(true)) {
+    console.log("button is pressed")
     timerOn = true;
     timerOver = false;
     timerPaused = false;
@@ -150,13 +161,14 @@ function countdown() {
     console.log("countdown");
 
     // formatting
-    backgroundColor = color(19, 100, 69);
+    backgroundColor = color(19, 89, 100);
     startTimerButton.hide();
     // stopTimerButton.show();
 
     // Status
-    fill(18, 89, 100);
-    rect(15, 15, width - 30, 100, 15);
+    fill(19, 100, 69);
+    rect(15, 15, width - 30, 110, 15);
+    status(); 
 
     // Timer
     fill(174, 100, 100);
@@ -168,7 +180,65 @@ function countdown() {
     timeY = height / 2 + 50;
 
     setInterval(timer(), 1000);
+    health += duration/(25*60*10); 
   }
+}
+
+//this function shows the status
+function status() {
+  // formatting
+  fill(100);
+  textSize(18);
+  strokeWeight(1);
+
+  // level
+  textAlign(LEFT);
+  text(`level: ${level}`, 30, 40);
+
+  // textAlign(RIGHT);
+  // text(`level: ${level}`, width - 30, 40);
+  
+  // adjustments 
+  if (exp >= expCap) {
+    level++; 
+    exp = 0; 
+    expCap += 50; 
+  }
+  if (health >= 50) {
+    health = 50
+  }
+
+  // EXP
+  stroke(44, 96, 100);
+  noFill();
+  rect(85, 50, width / 2, 20);
+  noStroke();
+  fill(100);
+  text("EXP", 30, 65);
+  text(expCap, width / 2 + 95, 65);
+  fill(44, 96, 100);
+  rect(85, 50, ((exp / expCap) * width) / 2, 20);
+  fill(100);
+  textAlign(CENTER);
+  text(round(exp), ((exp / expCap) * width) / 2 / 2 + 80, 65);
+
+  // Health
+  stroke(176, 100, 81);
+  noFill();
+  rect(85, 80, width / 2, 20);
+  noStroke();
+  fill(100);
+  textAlign(LEFT);
+  text("health", 30, 95);
+  text(50, width / 2 + 95, 95);
+  fill(176, 100, 81);
+  rect(85, 80, ((health / 50) * width) / 2, 20);
+  fill(100);
+  textAlign(CENTER);
+  text(round(health), ((health / 50) * width) / 2 / 2 + 80, 95);
+  
+  
+  
 }
 
 // This function outlines the starting page of the program
@@ -182,8 +252,9 @@ function pageOne() {
     stroke(18, 89, 100);
     strokeWeight(3);
     fill(backgroundColor);
-    rect(15, 15, width - 30, 100, 15);
+    rect(15, 15, width - 30, 110, 15);
     noStroke();
+    status();
 
     // Time
     fill(174, 100, 100);
@@ -208,23 +279,22 @@ function waitingRoom() {
   if (waiting == true && gamePage == false) {
     // formatting
     backgroundColor = color(176, 100, 81);
-    textSize(50); 
+    textSize(50);
     textAlign(CENTER);
-    fill(270, 5, 16); 
-    text("press any key \n to start playing!", width/2, height/2);
-    
-    //navigating 
+    fill(270, 5, 16);
+    text("press any key \n to start playing!", width / 2, height / 2);
+
+    //navigating
     if (keyIsPressed) {
-      gamePage = true; 
-      waiting = false; 
+      gamePage = true;
+      waiting = false;
     }
-    
   }
 }
 
 // This function plays the game
 function runGame() {
-  if (gamePage == true && waiting == false ) {
+  if (gamePage == true && waiting == false) {
     console.log("gamemode");
     //formatting
     backgroundColor = color(270, 5, 16);
@@ -255,10 +325,15 @@ function runGame() {
     textSize(14);
     text("Time remaining:", 20, 40);
     text(`Score: ${score}`, 20, 100);
+    
+    // Big Game
 
     if (duration <= 0) {
       gamePage = false;
       timerOn = false;
+      exp += score*10; 
+      health -= round(score*3/2);
+      score = 0; 
     }
   }
 }
