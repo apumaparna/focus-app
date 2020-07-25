@@ -6,16 +6,14 @@
           mouseIsPressed, windowWidth, windowHeight, noStroke, UP_ARROW, DOWN_ARROW 
           LEFT_ARROW, RIGHT_ARROW, backgroundColor, round textAlign CENTER LEFT floor \
           loadFont textFont createButton mouseIsPressed break myDraw textStyle BOLD
-          keyIsPressed noFill*/
+          keyIsPressed noFill noSmooth*/
 
 let duration, pomTimes, backgroundColor, timeX, timeY;
 let score;
 let mouseEllipse,
-  ball1,
-  ball2,
-  ball3,
   balls = [];
 let level, exp, health, expCap;
+let bushes = [], toms = []; 
 
 let timerOver = false,
   timerOn = false,
@@ -72,12 +70,16 @@ function setup() {
   }
   score = 0;
   noStroke();
-
+  
   // over-arching game setup
   level = 0;
   exp = 0;
   health = 50;
   expCap = 100;
+  
+  for (var i = 0; i < 250; i++) {
+    bushes.push(new Bush());
+  }
 
   pageOne();
 }
@@ -95,6 +97,16 @@ function draw() {
   // Starter page
   // setInterval(timer(), 10);
   // countdown();
+}
+
+function plants() {
+  bushes.forEach(function(bush) {
+      bush.draw();
+    });  
+  
+  toms.forEach(function(tom) {
+      tom.draw();
+    });
 }
 
 function timer() {
@@ -161,6 +173,8 @@ function mousePressed() {
 function countdown() {
   if (timerOn == true && gamePage == false && final == false) {
     console.log("countdown");
+    
+    plants(); 
 
     // formatting
     backgroundColor = color(19, 89, 100);
@@ -205,9 +219,13 @@ function status() {
     level++;
     exp = 0;
     expCap += 50;
+    toms.push(new Fruit()); 
   }
   if (health >= 50) {
     health = 50;
+  } else if (health < 0) {
+    level = 0; 
+    toms = []
   }
 
   // EXP
@@ -251,6 +269,8 @@ function pageOne() {
     console.log("pag1");
     backgroundColor = color(270, 5, 16);
     duration = 1 * 5 * 100;
+    
+    plants(); 
 
     // Status
     stroke(18, 89, 100);
@@ -287,6 +307,7 @@ function waitingRoom() {
     textAlign(CENTER);
     fill(270, 5, 16);
     text("press any key \n to start playing!", width / 2, height / 2);
+    plants(); 
 
     //navigating
     if (keyIsPressed) {
@@ -352,6 +373,7 @@ function finalPage() {
     fill(27, 5, 16);
     rect(15, 15, width - 30, 110, 15);
     status();
+    plants(); 
 
     //text
     textAlign(CENTER);
@@ -428,5 +450,34 @@ class Ball {
       this.coinX = random(width);
       this.coinY = random(height);
     }
+  }
+}
+
+class Bush {
+  constructor() {
+    this.r = random(10, 40)
+    this.x = random(width)
+    this.y = random(height - 50, height); 
+    this.col = random(90, 150); 
+    this.darkness = random(50, 80); 
+  }
+  draw() {
+    noSmooth(); 
+    fill(this.col, 80, this.darkness); 
+    ellipse(this.x, this.y, this.r, this.r)
+  }
+}
+
+class Fruit {
+  constructor() {
+    this.r = random(10, 30)
+    this.x = random(width)
+    this.y = random(height - 50, height); 
+    this.col = random(0, 30); 
+    this.darkness = random(70, 90);
+  }
+  draw(){
+    fill(this.col, 80, this.darkness); 
+    ellipse(this.x, this.y, this.r, this.r)
   }
 }
