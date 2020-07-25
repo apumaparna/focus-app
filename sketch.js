@@ -22,7 +22,8 @@ let timerOver = false,
   timerPaused = false,
   gamePage = false,
   gameIsOver = false,
-  waiting = false;
+  waiting = false,
+  final = false;
 
 let timerFont;
 let startTimerButton, stopTimerButton;
@@ -51,7 +52,7 @@ function setup() {
 
   // startTimer setup
   startTimerButton = createButton("  start  ");
-  startTimerButton.mousePressed(false); 
+  startTimerButton.mousePressed(false);
   startTimerButton.position(width / 2 - 20, 300);
   startTimerButton.style("background-color", color(177, 83, 27));
   startTimerButton.style("border-color", color(176, 100, 81));
@@ -89,6 +90,7 @@ function draw() {
   countdown();
   waitingRoom();
   runGame();
+  finalPage();
 
   // Starter page
   // setInterval(timer(), 10);
@@ -138,10 +140,10 @@ function pauseTimer() {
 }
 
 function mousePressed() {
-  console.log("mouse is pressed")
-  
+  console.log("mouse is pressed");
+
   if (startTimerButton.mousePressed(true)) {
-    console.log("button is pressed")
+    console.log("button is pressed");
     timerOn = true;
     timerOver = false;
     timerPaused = false;
@@ -157,7 +159,7 @@ function mousePressed() {
 
 // Studying timer!
 function countdown() {
-  if (timerOn == true && gamePage == false) {
+  if (timerOn == true && gamePage == false && final == false) {
     console.log("countdown");
 
     // formatting
@@ -168,7 +170,7 @@ function countdown() {
     // Status
     fill(19, 100, 69);
     rect(15, 15, width - 30, 110, 15);
-    status(); 
+    status();
 
     // Timer
     fill(174, 100, 100);
@@ -180,7 +182,7 @@ function countdown() {
     timeY = height / 2 + 50;
 
     setInterval(timer(), 1000);
-    health += duration/(25*60*10); 
+    health += duration / (25 * 60 * 10);
   }
 }
 
@@ -197,15 +199,15 @@ function status() {
 
   // textAlign(RIGHT);
   // text(`level: ${level}`, width - 30, 40);
-  
-  // adjustments 
+
+  // adjustments
   if (exp >= expCap) {
-    level++; 
-    exp = 0; 
-    expCap += 50; 
+    level++;
+    exp = 0;
+    expCap += 50;
   }
   if (health >= 50) {
-    health = 50
+    health = 50;
   }
 
   // EXP
@@ -236,14 +238,16 @@ function status() {
   fill(100);
   textAlign(CENTER);
   text(round(health), ((health / 50) * width) / 2 / 2 + 80, 95);
-  
-  
-  
 }
 
 // This function outlines the starting page of the program
 function pageOne() {
-  if (timerOn == false && gamePage == false && waiting == false) {
+  if (
+    timerOn == false &&
+    gamePage == false &&
+    waiting == false &&
+    final == false
+  ) {
     console.log("pag1");
     backgroundColor = color(270, 5, 16);
     duration = 1 * 5 * 100;
@@ -276,7 +280,7 @@ function pageOne() {
 
 // This function sets up the waiting room between the work room and the playground
 function waitingRoom() {
-  if (waiting == true && gamePage == false) {
+  if (waiting == true && gamePage == false && final == false) {
     // formatting
     backgroundColor = color(176, 100, 81);
     textSize(50);
@@ -294,7 +298,7 @@ function waitingRoom() {
 
 // This function plays the game
 function runGame() {
-  if (gamePage == true && waiting == false) {
+  if (gamePage == true && waiting == false && final == false) {
     console.log("gamemode");
     //formatting
     backgroundColor = color(270, 5, 16);
@@ -325,15 +329,44 @@ function runGame() {
     textSize(14);
     text("Time remaining:", 20, 40);
     text(`Score: ${score}`, 20, 100);
-    
+
     // Big Game
 
     if (duration <= 0) {
       gamePage = false;
       timerOn = false;
-      exp += score*10; 
-      health -= round(score*3/2);
-      score = 0; 
+      exp += score * 10;
+      health -= round((score * 3) / 2);
+      score = 0;
+      final = true;
+    }
+  }
+}
+
+function finalPage() {
+  if (final == true) {
+    console.log("fin");
+
+    backgroundColor = color(44, 96, 100);
+    // Status
+    fill(27, 5, 16);
+    rect(15, 15, width - 30, 110, 15);
+    status();
+
+    //text
+    textAlign(CENTER);
+    textSize(60);
+    fill(27, 5, 16);
+    text("GAME OVER!", width / 2, height / 2 + 30);
+
+    textSize(30);
+    text("click any key to continue", width / 2, height / 2 + 100);
+
+    if (keyIsPressed) {
+      timerOn = false;
+      gamePage = false;
+      waiting = false;
+      final = false;
     }
   }
 }
