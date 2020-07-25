@@ -7,13 +7,19 @@
 =================================
 ## Description
 
-This program is a fun way to spend your time while still being productive. Staying focused (and not procrastinating!) is hard. Focus Fun aims to make this process not only easier but more enjoyable.
+### About Hocus-Pocus-Focus 
+HPF is a multi-layer software that combines gamification and the Pomodoro Technique to make productivity fun. The pomodoro technique suggests a period of 25 minutes working followed by a 5 minute break, a process that is automatically implemented by HPF. 
 
-Focus Fun implements the Pomodoro Focus techique. This technique suggests a period of 25 minutes working followed by a 5 minute break. This program helps you out by setting the times for the Pomodoro technique, so you don't have to do any work other than pressing "start"! This program also offers a fun game in the 5 minute intermission for you to destress. Worried about getting so caught up in the game that you forget to go back to work? No worries! The game automatically stops after 5 minutes.
+Here's the game:  
+You are among one of the first humans to be living on Mars! However, this life of adventure comes with its own struggles. Your mission on Mars involves growing a garden and gathering samples while also keeping yourself healthy. How does it work? Well, it's simple: 
+- During the 5 minute break, you will play a mini-game. The goal of the game is to catch as many of the moving samples as possible before the five minutes run out! Doing so helps you gain EXP (experience points) that you need to reach the next level. However, this is hard labor, and it drains you health. 
+- You can regain lost health by focusing during the 25 minute work period. 
+- Everytime you reach a new level, you will grow one new fruit! 
 
-This is just one of Focus Fun's cool features. The game also includes a health and experience bar. As you play the mini-games, you gain the experience you need to reach the next level. However, you also suffer damage from playing the game. The only way to recover is to let your player rest during a 25 minute work period! 
+### The Technicalities-- How it was made 
+HPF was made through a combination of JavaScript, HTML, and CSS. For this software, I took advantage of the p5.js library ([link](https://p5js.org/)) and the p5.collide2D library ([link](https://github.com/bmoren/p5.collide2D])). 
 
-## Files 
+## The Files
 
 - README.md - This file!
 - index.html - Html page base structure.
