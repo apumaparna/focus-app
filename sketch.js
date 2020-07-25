@@ -8,7 +8,7 @@
           loadFont textFont createButton mouseIsPressed break myDraw*/
 
 let duration, pomTimes, backgroundColor, timeX, timeY;
-let score, time, gameIsOver;
+let score;
 let mouseEllipse,
   ball1,
   ball2,
@@ -18,7 +18,8 @@ let mouseEllipse,
 let timerOver = false,
   timerOn = false,
   timerPaused = false,
-  gamePage = false;
+  gamePage = false,
+  gameIsOver = false;
 
 let timerFont;
 let startTimerButton, stopTimerButton;
@@ -64,7 +65,6 @@ function setup() {
   for (var i = 0; i < 4; i++) {
     balls.push(new Ball());
   }
-  gameIsOver = false;
   score = 0;
   noStroke();
 
@@ -74,10 +74,10 @@ function setup() {
 function draw() {
   background(backgroundColor);
   // pauseTimer();
-  
-    pageOne();
-    countdown();
-    runGame();
+
+  pageOne();
+  countdown();
+  runGame();
 
   // Starter page
   // setInterval(timer(), 10);
@@ -108,7 +108,8 @@ function timer() {
       timerOver = true;
       timerOn = false;
       gamePage = true;
-      backgroundColor = color(270, 5, 16);
+      duration = 1 * 5 * 100;
+      //backgroundColor = color(270, 5, 16);
     } else {
       duration--;
     }
@@ -170,9 +171,9 @@ function countdown() {
 // This function outlines the starting page of the program
 function pageOne() {
   if (timerOn == false && gamePage == false) {
-    console.log("pressed");
+    console.log("pag1");
     backgroundColor = color(270, 5, 16);
-    duration = 1 * 10 * 100;
+    duration = 1 * 5 * 100;
 
     // Status
     fill(18, 89, 100);
@@ -199,32 +200,41 @@ function pageOne() {
 // This function sets up the screen to run the game
 function runGame() {
   if (gamePage == true) {
+    console.log("gamemode");
     //formatting
     backgroundColor = color(270, 5, 16);
     stopTimerButton.hide();
     startTimerButton.hide();
-    textSize(12);
+
+    // set up
+    timeX = 20;
+    timeY = 70;
+    timerOver = false;
+    textSize(30);
     textAlign(LEFT);
-    
-    // set up 
-    duration = 5 * 60 * 100;
-    
+    fill(44, 96, 100);
+    setInterval(timer(), 1000);
+
     fill(290, 80, 100);
     mouseEllipse = ellipse(mouseX, mouseY, 20);
-    
-  
+
     //Game functions
     balls.forEach(function(ball) {
       ball.draw();
       ball.move();
       ball.collide();
     });
-    
+
     // Display
     fill(100);
-    text(`Time remaining: ${time}`, 20, 40);
-    text(`Score: ${score}`, 20, 60);
+    textSize(14);
+    text("Time remaining:", 20, 40);
+    text(`Score: ${score}`, 20, 100);
 
+    if (duration <= 0) {
+      gamePage = false;
+      timerOn = false;
+    }
   }
 }
 
@@ -247,12 +257,13 @@ class Ball {
   draw() {
     fill(this.color, 80, 80);
     ellipse(this.coinX, this.coinY, this.radius);
-    fill(0);
+    textSize(12);
+    fill(100);
     text(this.worth, this.coinX - 4, this.coinY + 3);
   }
 
   move() {
-    if (gameIsOver) {
+    if (!gamePage) {
       return;
     }
     this.coinX += this.xVel;
@@ -268,7 +279,7 @@ class Ball {
   }
 
   collide() {
-    if (gameIsOver) {
+    if (!gamePage) {
       return;
     }
     this.hit = collideCircleCircle(
