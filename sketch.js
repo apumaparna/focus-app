@@ -5,13 +5,15 @@
           collideRectCircle, text, textSize, mouseX, mouseY, strokeWeight, line, 
           mouseIsPressed, windowWidth, windowHeight, noStroke, UP_ARROW, DOWN_ARROW 
           LEFT_ARROW, RIGHT_ARROW, backgroundColor, round textAlign CENTER floor loadFont
-          textFont createButton mouseIsPressed*/
+          textFont createButton mouseIsPressed break*/
 
 let duration, pomTimes, backgroundColor;
 let timerOver = false,
-  timerOn = false;
+  timerOn = false,
+  timerPaused = false,
+  gamePage = false;
 let timerFont;
-let startTimerButton;
+let startTimerButton, stopTimerButton;
 
 function preload() {
   timerFont = loadFont(
@@ -29,15 +31,32 @@ function setup() {
   backgroundColor = 95;
   duration = 25 * 60 * 100;
 
+  timerPaused = false;
+
   startTimerButton = createButton("  start  ");
   startTimerButton.position(width / 2 - 20, 300);
   startTimerButton.style("background-color", color(177, 83, 27));
   startTimerButton.style("border-color", color(176, 100, 81));
   startTimerButton.style("color", color(176, 100, 81));
+
+  stopTimerButton = createButton("  stop  ");
+  stopTimerButton.position(width / 2 - 20, 330);
+  stopTimerButton.style("background-color", color(270, 5, 16));
+  stopTimerButton.style("border-color", color(44, 96, 100));
+  stopTimerButton.style("color", color(44, 96, 100));
+  stopTimerButton.hide();
+  
+  pageOne(); 
 }
 
 function draw() {
   background(backgroundColor);
+  // pauseTimer();
+  for (var i = 0; i < 3; i++) {
+    pageOne();
+    countdown();
+    runGame();
+  }
   pageOne();
   countdown();
 
@@ -67,40 +86,69 @@ function timer() {
     }
 
     if (duration <= 0) {
-      timerOver == true;
+      timerOver = true;
+      timerOn = false;
+      gamePage = true;
+      backgroundColor = color(270, 5, 16);
     } else {
       duration--;
     }
   }
 }
 
+function pauseTimer() {
+  if (timerPaused == true) {
+    console.log(" pressed");
+    backgroundColor = color(100, 100, 69);
+    timerOver = false;
+    stopTimerButton.hide();
+    startTimerButton.show();
+  }
+}
+
+function mousePressed() {
+  if (startTimerButton.mousePressed()) {
+    timerOn = true;
+    timerOver = false;
+    timerPaused = false;
+  } else if (stopTimerButton.mouseClicked()) {
+    timerPaused = true;
+    // backgroundColor = color(100, 100, 69);
+    timerOver = false;
+    timerOn = false;
+    stopTimerButton.hide();
+    startTimerButton.show();
+  }
+}
+
 function countdown() {
-  if (timerOn == true) {
-  console.log("countdown");
+  if (timerOn == true && gamePage == false) {
+    console.log("countdown");
 
-  // formatting
-  backgroundColor = color(19, 100, 69);
-  startTimerButton.hide();
+    // formatting
+    backgroundColor = color(19, 100, 69);
+    startTimerButton.hide();
+    // stopTimerButton.show();
 
-  // Status
-  fill(18, 89, 100);
-  rect(15, 15, width - 30, 100, 15);
-  // Timer
-  fill(174, 100, 100);
-  textFont(timerFont);
-  textSize(100);
-  textAlign(CENTER);
+    // Status
+    fill(18, 89, 100);
+    rect(15, 15, width - 30, 100, 15);
+    // Timer
+    fill(174, 100, 100);
+    textFont(timerFont);
+    textSize(100);
+    textAlign(CENTER);
 
-  // timer function
-  setInterval(timer(), 10); }
+    setInterval(timer(), 1000);
+  }
 }
 
 // This function outlines the starting page of the program
 function pageOne() {
-  if (timerOn == false) {
+  if (timerOn == false && gamePage == false) {
     console.log("pressed");
     backgroundColor = color(270, 5, 16);
-    duration = 25 * 60 * 100;
+    duration = 1 * 10 * 100;
 
     // Status
     fill(18, 89, 100);
@@ -114,10 +162,20 @@ function pageOne() {
     text("25:00", width / 2, height / 2 + 50);
 
     // Start Button
-    startTimerButton.show(); 
-    if (mouseIsPressed && startTimerButton.mousePressed()) {
-      console.log(" pressed");
-      timerOn = true;
-    }
+    stopTimerButton.hide();
+    startTimerButton.show();
+    // if (mouseIsPressed && startTimerButton.mousePressed()) {
+    //   console.log(" pressed");
+    //   timerOn = true;
+    //   timerOver = false;
+    // }
+  }
+}
+
+function runGame() {
+  if (gamePage == true) {
+    // backgroundColor = color(270, 5, 16);
+    stopTimerButton.hide();
+    startTimerButton.hide();
   }
 }
