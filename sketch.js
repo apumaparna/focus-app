@@ -2,12 +2,14 @@
 // Add to this list as you consult the p5.js documentation for other functions.
 /* global createCanvas, colorMode, HSB, width, height, random, background, fill, 
           color, random, rect, ellipse, stroke, image, loadImage, keyCode,
-          collideRectCircle, text, textSize, mouseX, mouseY, strokeWeight, line, 
+          collideCircleCircle, text, textSize, mouseX, mouseY, strokeWeight, line, 
           mouseIsPressed, windowWidth, windowHeight, noStroke, UP_ARROW, DOWN_ARROW 
           LEFT_ARROW, RIGHT_ARROW, backgroundColor, round textAlign CENTER floor loadFont
           textFont createButton mouseIsPressed break*/
 
-let duration, pomTimes, backgroundColor;
+ 
+
+let duration, pomTimes, backgroundColor, timeX, timeY;
 let timerOver = false,
   timerOn = false,
   timerPaused = false,
@@ -73,15 +75,15 @@ function timer() {
 
     if (minutes < 10) {
       if (seconds < 10) {
-        text(`0${minutes}:0${seconds}`, width / 2, height / 2 + 50);
+        text(`0${minutes}:0${seconds}`, timeX, timeY);
       } else {
-        text(`0${minutes}:${seconds}`, width / 2, height / 2 + 50);
+        text(`0${minutes}:${seconds}`, timeX, timeY);
       }
     } else {
       if (seconds < 10) {
-        text(`${minutes}:0${seconds}`, width / 2, height / 2 + 50);
+        text(`${minutes}:0${seconds}`, timeX, timeY);
       } else {
-        text(`${minutes}:${seconds}`, width / 2, height / 2 + 50);
+        text(`${minutes}:${seconds}`, timeX, timeY);
       }
     }
 
@@ -121,6 +123,7 @@ function mousePressed() {
   }
 }
 
+// Studying timer!
 function countdown() {
   if (timerOn == true && gamePage == false) {
     console.log("countdown");
@@ -133,11 +136,15 @@ function countdown() {
     // Status
     fill(18, 89, 100);
     rect(15, 15, width - 30, 100, 15);
+    
     // Timer
     fill(174, 100, 100);
     textFont(timerFont);
     textSize(100);
     textAlign(CENTER);
+    
+    timeX = width/2; 
+    timeY = height / 2 + 50
 
     setInterval(timer(), 1000);
   }
@@ -172,10 +179,12 @@ function pageOne() {
   }
 }
 
+// This function sets up the screen to run the game
 function runGame() {
   if (gamePage == true) {
-    // backgroundColor = color(270, 5, 16);
+    backgroundColor = color(270, 5, 16);
     stopTimerButton.hide();
     startTimerButton.hide();
+    duration = 5*60*100; 
   }
 }
