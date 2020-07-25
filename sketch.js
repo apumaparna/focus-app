@@ -5,7 +5,8 @@
           collideCircleCircle, text, textSize, mouseX, mouseY, strokeWeight, line, 
           mouseIsPressed, windowWidth, windowHeight, noStroke, UP_ARROW, DOWN_ARROW 
           LEFT_ARROW, RIGHT_ARROW, backgroundColor, round textAlign CENTER LEFT floor \
-          loadFont textFont createButton mouseIsPressed break myDraw*/
+          loadFont textFont createButton mouseIsPressed break myDraw textStyle BOLD
+          keyIsPressed*/
 
 let duration, pomTimes, backgroundColor, timeX, timeY;
 let score;
@@ -19,7 +20,8 @@ let timerOver = false,
   timerOn = false,
   timerPaused = false,
   gamePage = false,
-  gameIsOver = false;
+  gameIsOver = false,
+  waiting = false;
 
 let timerFont;
 let startTimerButton, stopTimerButton;
@@ -77,6 +79,7 @@ function draw() {
 
   pageOne();
   countdown();
+  waitingRoom();
   runGame();
 
   // Starter page
@@ -107,7 +110,7 @@ function timer() {
     if (duration <= 0) {
       timerOver = true;
       timerOn = false;
-      gamePage = true;
+      waiting = true;
       duration = 1 * 5 * 100;
       //backgroundColor = color(270, 5, 16);
     } else {
@@ -170,14 +173,17 @@ function countdown() {
 
 // This function outlines the starting page of the program
 function pageOne() {
-  if (timerOn == false && gamePage == false) {
+  if (timerOn == false && gamePage == false && waiting == false) {
     console.log("pag1");
     backgroundColor = color(270, 5, 16);
     duration = 1 * 5 * 100;
 
     // Status
-    fill(18, 89, 100);
+    stroke(18, 89, 100);
+    strokeWeight(3);
+    fill(backgroundColor);
     rect(15, 15, width - 30, 100, 15);
+    noStroke();
 
     // Time
     fill(174, 100, 100);
@@ -197,9 +203,28 @@ function pageOne() {
   }
 }
 
-// This function sets up the screen to run the game
+// This function sets up the waiting room between the work room and the playground
+function waitingRoom() {
+  if (waiting == true && gamePage == false) {
+    // formatting
+    backgroundColor = color(176, 100, 81);
+    textSize(50); 
+    textAlign(CENTER);
+    fill(270, 5, 16); 
+    text("press any key \n to start playing!", width/2, height/2);
+    
+    //navigating 
+    if (keyIsPressed) {
+      gamePage = true; 
+      waiting = false; 
+    }
+    
+  }
+}
+
+// This function plays the game
 function runGame() {
-  if (gamePage == true) {
+  if (gamePage == true && waiting == false ) {
     console.log("gamemode");
     //formatting
     backgroundColor = color(270, 5, 16);
