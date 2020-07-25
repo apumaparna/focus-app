@@ -4,7 +4,6 @@
 
 *Author: Aparna Kumar*
 
-=================================
 ## Description
 
 ### About Hocus-Pocus-Focus 
