@@ -133,7 +133,7 @@ function timer() {
       timerOver = true;
       timerOn = false;
       waiting = true;
-      duration = 1 * 5 * 100;
+      duration = 5 * 60 * 100;
       //backgroundColor = color(270, 5, 16);
     } else {
       duration--;
@@ -268,7 +268,7 @@ function pageOne() {
   ) {
     console.log("pag1");
     backgroundColor = color(270, 5, 16);
-    duration = 1 * 5 * 100;
+    duration = 25 * 60 * 100;
     
     plants(); 
 
