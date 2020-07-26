@@ -1,4 +1,4 @@
-# Focus-Fun
+# Hocus-Pocus? Focus
 
 *Sigma Hacks 2020*
 
@@ -14,6 +14,8 @@ You are among one of the first humans to be living on Mars! However, this life o
 - During the 5 minute break, you will play a mini-game. The goal of the game is to catch as many of the moving samples as possible before the five minutes run out! Doing so helps you gain EXP (experience points) that you need to reach the next level. However, this is hard labor, and it drains you health. 
 - You can regain lost health by focusing during the 25 minute work period. 
 - Everytime you reach a new level, you will grow one new fruit! 
+
+Video: [link](https://youtu.be/AyhHC_qvlr8)
 
 ### The Technicalities-- How it was made 
 HPF was made through a combination of JavaScript, HTML, and CSS. For this software, I took advantage of the p5.js library ([link](https://p5js.org/)) and the p5.collide2D library ([link](https://github.com/bmoren/p5.collide2D])). 
